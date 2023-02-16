@@ -1,0 +1,8 @@
+<odoo>
+    <data>
+    <record id="send_maid_when_approve" model="mail.template">
+    <field name="name">send_maid_when_approve</field>
+    <field name="model_id" ref="purchase_request.model_purchase_request"/>
+    </record>
+    </data>
+</odoo>

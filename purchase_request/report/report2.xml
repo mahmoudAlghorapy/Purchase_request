@@ -1,0 +1,89 @@
+<odoo>
+
+    <record id="report_purchase_request" model="ir.actions.report">
+        <field name="name">Purchase Request</field>
+        <field name="model">purchase.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">purchase_request.report_purchase_request_view</field>
+        <field name="report_file">purchase_request.report_purchase_request_view</field>
+        <field name="binding_model_id" ref="model_purchase_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_purchase_request_view">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                         <div class="page">
+                            <h2>
+                                <span t-field="doc.request_name"/>
+                            </h2>
+                            <div>
+                                <strong>Start Date: </strong>
+                                <span t-field="doc.start_date"/>
+                            </div>
+                            <div>
+                                <strong>End Date:</strong>
+                               <span t-field="doc.end_date"/>
+                            <div>
+                                <strong>Requested By:</strong>
+                                <span t-field="doc.requested_by"/>
+                            </div>
+                            </div>
+                         </div>
+                    <table class="table table-bordered mb64">
+                        <tr>
+                            <td>Rejection Reason:</td>
+                            <td>Status:</td>
+                            <td>Order</td>
+                            <td>Confirmed qty:</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span t-field="doc.rejection_reason"/>
+                            </td>
+
+                            <td>
+                                <span t-field="doc.state"/>
+                            </td>
+                            <td>
+                                <t t-foreach="doc.order_line_id" t-as="order">
+                                    <li>
+                                        Product:<span t-field="order.product_id"/>
+                                    </li>
+                                    <li>
+                                      description:<span t-field="order.description"/>
+                                    </li>
+                                    <li>
+                                        Quantity:<span t-field="order.quantity"/>
+                                    </li>
+                                    <li>
+                                        Unit Price:<span t-field="order.cost_price"/>
+                                    </li>
+                                    <li>
+                                        Total:<span t-field="order.total"/>
+                                    </li>
+                                </t>
+                            </td>
+                            <td>
+                                    <t t-set="sum_row2" t-value="0"/>
+                                <t t-foreach="doc.order_line_id" t-as="line">
+                                    <t t-set="sum_row2" t-value="sum_row2+line.quantity"/>
+                                </t>
+                                <t t-esc="sum_row2"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <td></td>
+                        <td><div>
+                               <h2> Total Price:<span t-field="doc.total_price"/></h2>
+                     </div></td>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+

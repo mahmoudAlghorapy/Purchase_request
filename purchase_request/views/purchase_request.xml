@@ -1,0 +1,108 @@
+<odoo>
+<record model="ir.ui.view" id="purchase_request_view">
+            <field name="name">purchase_request.form</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request">
+                    <header>
+                        <button id= "button_print" name="action_print" type="object" string="Print" states="approve" class="oe_highlight"/>
+                        <button id= "reserved_qty" name="reserved_qty" type="object" string="all quantity reserved" states="approve" class="oe_highlight"/>
+                        <button id= "button_create_po" name="action_create_po" type="object" string="Create PO"  class="oe_highlight" attrs="{'invisible':['|',('all_quantity_reserved','=',True),('state','!=','approve')]}"/>
+                        <button id= "button_to_be_approved" name="action_to_be_approved" type="object" string="To be approved" states="draft" class="oe_highlight"/>
+                        <button id= "button_approve" name="action_approve" type="object" string="Approve" states="to_be_approved" data-hotkey="m" icon="fa-WhatsApp" class="oe_highlight"/>
+                        <button id= "button_draft" name="action_draft" type="object" string="Reset to draft " states="cancel"  class="oe_highlight"/>
+                        <button id= "button_cancel" name="action_cancel" string="Cancel" states="draft,approve" type="object" />
+                        <button id= "button_reject" name="action_reject" string="Reject" states="to_be_approved" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,approve,reject,cancel"/>/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button name="preview_patient_history" string="Purchase Order" type="object" class="oe_stat_button" icon="fa-pencil-square-o" states="approve"
+                        attrs="{'invisible': [('count_purchase_orders', '=', 0)]}">
+                            <field name="count_purchase_orders" widget="statinfo" nolabel="1"/>
+                        </button>
+                      </div>
+                        <group >
+                            <group>
+
+                              <field name="request_name" attrs="{'readonly':[('state','in',['approve','reject','cancel'])]}"/>
+                              <field name="requested_by" readonly="1" attrs="{'readonly':[('state','in',['approve','reject','cancel'])]}"/>
+                            </group>
+                            <group>
+                                <field name="start_date" attrs="{'readonly':[('state','in',['approve','reject','cancel'])]}" />
+                                <field name="end_date" attrs="{'readonly':[('state','in',['approve','reject','cancel'])]}" />
+                                <field name="count_purchase_orders" />
+                            </group>
+                            <group>
+                                <field name="rejection_reason" attrs="{'invisible':[('state','in',['approve','draft','to_be_approved','cancel'])]}"/>
+                            </group>
+<!--                             <group class="oe_subtotal_footer oe_right" colspan="2" name="total_price">-->
+<!--                                    <field name="total_price" widget="account-tax-totals-field" nolabel="1" colspan="2"/>-->
+<!--                                </group>-->
+
+                        </group>
+                        <notebook>
+                            <page string="Order Lines ">
+                                <field name="order_line_id" attrs="{'readonly':[('state','in',['approve','reject','cancel'])]}">
+                                    <tree editable="bottom">
+                                        <field name="product_id" />
+                                        <field name="description"/>
+                                        <field name="quantity"/>
+                                        <field name="cost_price"/>
+                                        <field name="total"/>
+
+                                    </tree>
+                                </field>
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                    <group colspan="4" class="oe_subtotal_footer oe_right">
+                                        <field name="total_price" />
+                                    </group>
+
+                                <div class="oe_clear"/>
+                            </group>
+                            </page>
+                        </notebook>
+
+
+                    </sheet>
+                    <div class="oe_chatter">
+                      <field name="message_follower_ids"/>
+                      <field name="activity_ids"/>
+                      <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+      <record model="ir.ui.view" id="purchase_request_tree_view">
+            <field name="name">purchase_request.tree</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Request">
+                    <field name="request_name"/>
+                    <field name="requested_by"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="rejection_reason"/>
+                    <field name="total_price"/>
+                </tree>
+            </field>
+        </record>
+
+<record model="ir.actions.act_window" id="purchase_request_list_action">
+            <field name="name">purchase_request</field>
+            <field name="res_model">purchase.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first Purchase request
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="main_purchase_request_menu" name="Purchase Request"/>
+
+        <menuitem id="employee_relatives_menu" name="Purchase Request"
+                  parent="main_purchase_request_menu" sequence="1"
+        action="purchase_request_list_action"/>
+
+</odoo>

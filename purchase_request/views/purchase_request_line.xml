@@ -1,0 +1,53 @@
+<odoo>
+<record model="ir.ui.view" id="purchase_request_line_form_view">
+            <field name="name">purchase_request_line.form</field>
+            <field name="model">purchase.request.line</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request line">
+                    <sheet>
+                        <group>
+                            <group>
+
+                              <field name="product_id"/>
+                              <field name="description"/>
+                            </group>
+                        <group>
+                            <field name="quantity"/>
+                              <field name="cost_price"/>
+                              <field name="total"/>
+                        </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+      <record model="ir.ui.view" id="purchase_request_line_tree_view">
+            <field name="name">purchase_request_line.tree</field>
+            <field name="model">purchase.request.line</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Request Line">
+                    <field name="product_id"/>
+                    <field name="description"/>
+                    <field name="quantity"/>
+                    <field name="cost_price" readonly="1"/>
+                    <field name="total" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="purchase_request_line_action">
+            <field name="name">purchase_request_line</field>
+            <field name="res_model">purchase.request.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create the first purchase request line
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="relatives_menu" name="Purchase Request"
+                  parent="main_purchase_request_menu" sequence="2"
+        action="purchase_request_line_action"/>
+
+</odoo>
